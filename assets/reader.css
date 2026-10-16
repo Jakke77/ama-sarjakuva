@@ -1,0 +1,103 @@
+/* Jaettu AMA-lukutila: reader.js luo vain ama-alkuiset elementit. */
+.ama-reader {
+  --ama-reader-ink: #f1f5ff;
+  --ama-reader-muted: #a9b7d0;
+  --ama-reader-border: #39475f;
+  color-scheme: dark;
+  box-sizing: border-box;
+  width: calc(100% - 36px);
+  max-width: 1680px;
+  height: calc(100vh - 36px);
+  height: calc(100dvh - 36px);
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--ama-reader-border);
+  border-radius: 16px;
+  background: #0b101b;
+  color: var(--ama-reader-ink);
+  font: 16px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  box-shadow: 0 30px 100px #000b;
+}
+
+.ama-reader::backdrop { background: #02040ee8; }
+.ama-reader *, .ama-reader *::before, .ama-reader *::after { box-sizing: border-box; }
+.ama-reader [hidden] { display: none !important; }
+/* Isäntäsivun yleiset header/footer/p/h2-säännöt eivät saa muuttaa lukijan asettelua.
+ * :where pitää resetin heikkona, jotta jäljempänä olevat ama-luokat voittavat sen. */
+.ama-reader :where(header, footer, nav, figure, h2, p) { display: block; width: auto; max-width: none; margin: 0; padding: 0; border: 0; font: inherit; }
+.ama-reader-shell { display: flex; flex-direction: column; width: 100%; height: 100%; min-height: 0; }
+.ama-reader :where(header, footer, nav, p, h2) { margin: 0; max-width: none; }
+.ama-reader header, .ama-reader footer { display: block; min-height: 0; }
+.ama-reader nav { flex-wrap: nowrap; }
+.ama-reader-header, .ama-reader-footer { position: relative; z-index: 1; flex: 0 0 auto; background: #101827; }
+.ama-reader-header { padding: 13px 18px 12px; border-bottom: 1px solid var(--ama-reader-border); }
+.ama-reader-heading-row { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+.ama-reader-title { flex: 1; min-width: 0; margin: 0; color: var(--ama-reader-ink); font: 650 19px/1.25 system-ui, sans-serif; }
+.ama-reader-toolbar { display: flex; align-items: center; gap: 9px; }
+.ama-reader-button, .ama-reader-select, .ama-reader-image-link {
+  min-height: 44px;
+  border: 1px solid #52617b;
+  border-radius: 9px;
+  background: #1a2740;
+  color: var(--ama-reader-ink);
+  font: 600 15px/1.2 system-ui, sans-serif;
+}
+.ama-reader-button { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; padding: 10px 15px; cursor: pointer; white-space: nowrap; }
+.ama-reader-button:hover:not(:disabled) { background: #2c3e60; border-color: #91a9d1; }
+.ama-reader-button:disabled { opacity: .4; cursor: default; }
+.ama-reader-button:focus-visible, .ama-reader-select:focus-visible, .ama-reader-image-link:focus-visible, .ama-reader-stage:focus-visible { outline: 3px solid #a9dbff; outline-offset: 3px; }
+.ama-reader-close { flex: 0 0 auto; background: #293047; }
+.ama-reader-select-label { flex: 1 1 auto; min-width: 0; }
+.ama-reader-select { display: block; width: 100%; max-width: 100%; padding: 10px 34px 10px 12px; text-overflow: ellipsis; }
+.ama-reader-zoom { min-width: 138px; }
+.ama-reader-zoom[aria-pressed="true"] { background: #533b74; border-color: #b59dd2; }
+.ama-reader-stage { flex: 1 1 auto; min-height: 0; width: 100%; padding: 20px; overflow: auto; overscroll-behavior: contain; touch-action: pan-y pinch-zoom; scrollbar-color: #63728c #101624; scrollbar-gutter: stable; }
+.ama-reader-page { width: 100%; margin: 0; }
+.ama-reader-image { display: block; width: auto; max-width: 100%; height: auto; margin: 0 auto; background: #111; box-shadow: 0 3px 24px #0009; }
+.ama-is-zoomed .ama-reader-stage { touch-action: auto; }
+.ama-is-zoomed .ama-reader-page { width: max-content; min-width: 100%; }
+.ama-is-zoomed .ama-reader-image { max-width: none; }
+.ama-reader-load-status, .ama-reader-error { max-width: 38em; margin: 36px auto; text-align: center; color: var(--ama-reader-muted); }
+.ama-reader-error p { margin: 0 0 20px; }
+.ama-reader-image-link { display: inline-flex; align-items: center; justify-content: center; padding: 11px 16px; text-decoration: underline; text-underline-offset: .2em; }
+.ama-reader-image-link:hover { background: #2c3e60; }
+.ama-reader-footer { padding: 9px 18px 10px; border-top: 1px solid var(--ama-reader-border); }
+.ama-reader-bottom-navigation { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.ama-reader-counter { margin: 0; text-align: center; white-space: nowrap; color: #d2dcf0; font-variant-numeric: tabular-nums; }
+.ama-reader-help { margin: 8px 0 0; text-align: center; font-size: 12px; line-height: 1.4; color: var(--ama-reader-muted); }
+.ama-reader-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+@media (max-width: 650px) {
+  .ama-reader { width: 100%; max-width: 100%; height: 100vh; height: 100dvh; margin: 0; border: 0; border-radius: 0; }
+  .ama-reader-header { padding: max(9px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) 9px max(10px, env(safe-area-inset-left)); }
+  .ama-reader-heading-row { gap: 8px; margin-bottom: 8px; }
+  .ama-reader-title { font-size: 16px; }
+  .ama-reader-button, .ama-reader-select { font-size: 14px; }
+  .ama-reader-button { padding: 10px 11px; }
+  .ama-reader-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+  .ama-reader-select-label { grid-column: 1; grid-row: 1; }
+  .ama-reader-zoom { grid-column: 2; grid-row: 1; min-width: 126px; }
+  .ama-reader-toolbar > .ama-reader-previous, .ama-reader-toolbar > .ama-reader-next { display: none; }
+  .ama-reader-stage { padding: 10px; }
+  .ama-reader-footer { padding: 8px max(10px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
+  .ama-reader-bottom-navigation { gap: 7px; }
+  .ama-reader-counter { font-size: 13px; }
+  .ama-reader-help { margin-top: 6px; font-size: 11px; }
+}
+
+@media (max-height: 520px) {
+  .ama-reader { width: 100%; height: 100vh; height: 100dvh; margin: 0; border: 0; border-radius: 0; }
+  .ama-reader-header { padding-top: max(5px, env(safe-area-inset-top)); padding-bottom: 5px; }
+  .ama-reader-heading-row { margin-bottom: 4px; }
+  .ama-reader-title { font-size: 16px; }
+  .ama-reader-help { display: none; }
+  .ama-reader-footer { padding-top: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom)); }
+  .ama-reader-stage { padding: 10px; }
+}
+
+@media (forced-colors: active) {
+  .ama-reader, .ama-reader-header, .ama-reader-footer, .ama-reader-button, .ama-reader-select { border-color: CanvasText; }
+  .ama-reader-button:disabled { opacity: 1; color: GrayText; border-color: GrayText; }
+}
