@@ -18,8 +18,9 @@ Suomenkielinen avaruusmysteeri sarjakuvana. MasterJ:n AMA-lukusivu.
 | 6 | [Kynnyksen kaiku](https://jakke77.github.io/ama-sarjakuva/#lue-6) |
 | 7 | [Koputus](https://jakke77.github.io/ama-sarjakuva/#lue-7) |
 | 8 | [Rungon ääni](https://jakke77.github.io/ama-sarjakuva/#lue-8) |
+| 9 | [Ulkopuolella](https://jakke77.github.io/ama-sarjakuva/#lue-9) |
 
-Luettavana on 8 jaksoa ja 91 sarjakuvaruutua.
+Luettavana on 9 jaksoa ja 103 sarjakuvaruutua.
 
 ## Lukeminen
 
